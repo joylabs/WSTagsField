@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		686F7758243D06A5004B2EFF /* WSTagsField.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D7F3400D1D2A7407003F0082 /* WSTagsField.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D73307521EB3B8DE00FD29B4 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73307511EB3B8DE00FD29B4 /* TableViewController.swift */; };
 		D7F33FF61D2A7378003F0082 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F33FF51D2A7378003F0082 /* AppDelegate.swift */; };
 		D7F33FF81D2A7378003F0082 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F33FF71D2A7378003F0082 /* ViewController.swift */; };
@@ -14,7 +15,6 @@
 		D7F33FFD1D2A7378003F0082 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7F33FFC1D2A7378003F0082 /* Assets.xcassets */; };
 		D7F340001D2A7378003F0082 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7F33FFE1D2A7378003F0082 /* LaunchScreen.storyboard */; };
 		D7F340101D2A7416003F0082 /* WSTagsField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7F3400D1D2A7407003F0082 /* WSTagsField.framework */; };
-		D7F340111D2A7416003F0082 /* WSTagsField.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D7F3400D1D2A7407003F0082 /* WSTagsField.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,7 +48,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D7F340111D2A7416003F0082 /* WSTagsField.framework in Embed Frameworks */,
+				686F7758243D06A5004B2EFF /* WSTagsField.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,6 +138,8 @@
 				D7F340131D2A7416003F0082 /* PBXTargetDependency */,
 			);
 			name = WSTagsFieldExample;
+			packageProductDependencies = (
+			);
 			productName = WSTagsFieldExample;
 			productReference = D7F33FF21D2A7378003F0082 /* WSTagsFieldExample.app */;
 			productType = "com.apple.product-type.application";
@@ -167,6 +169,8 @@
 				Base,
 			);
 			mainGroup = D7F33FE91D2A7378003F0082;
+			packageReferences = (
+			);
 			productRefGroup = D7F33FF31D2A7378003F0082 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -318,7 +322,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -369,7 +373,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

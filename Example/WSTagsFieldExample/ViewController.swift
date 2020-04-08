@@ -40,6 +40,7 @@ class ViewController: UIViewController {
         tagsField.backgroundColor = .lightGray
         tagsField.returnKeyType = .continue
         tagsField.delimiter = ""
+        tagsField.isImageVisible = true
 
         tagsField.textDelegate = self
 

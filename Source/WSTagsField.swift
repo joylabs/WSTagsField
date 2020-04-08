@@ -66,6 +66,12 @@ open class WSTagsField: UIScrollView {
             tagViews.forEach { $0.displayDelimiter = self.isDelimiterVisible ? self.delimiter : "" }
         }
     }
+    
+    open var isImageVisible: Bool = false {
+        didSet {
+            tagViews.forEach { $0.isImageHidden = !isImageVisible }
+        }
+    }
 
     open var maxHeight: CGFloat = CGFloat.infinity {
         didSet {
@@ -214,6 +220,9 @@ open class WSTagsField: UIScrollView {
 
     /// Called when the text field text has changed. You should update your autocompleting UI based on the text supplied.
     open var onDidChangeText: ((WSTagsField, _ text: String?) -> Void)?
+    
+    /// Called before a tag is added. You should use this opportunity to update the tag before it's added.
+    open var onWillAddTag: ((WSTagsField, _ tag: WSTag) -> WSTag)?
 
     /// Called when a tag has been added. You should use this opportunity to update your local list of selected items.
     open var onDidAddTag: ((WSTagsField, _ tag: WSTag) -> Void)?
@@ -372,6 +381,11 @@ open class WSTagsField: UIScrollView {
         else if self.tags.contains(tag) {
             return
         }
+        
+        var tag = tag
+        if let onWillAddTag = onWillAddTag {
+            tag = onWillAddTag(self, tag)
+        }
 
         self.tags.append(tag)
 
@@ -382,6 +396,7 @@ open class WSTagsField: UIScrollView {
         tagView.selectedColor = self.selectedColor
         tagView.selectedTextColor = self.selectedTextColor
         tagView.displayDelimiter = self.isDelimiterVisible ? self.delimiter : ""
+        tagView.isImageHidden = !self.isImageVisible
         tagView.cornerRadius = self.cornerRadius
         tagView.borderWidth = self.borderWidth
         tagView.borderColor = self.borderColor
