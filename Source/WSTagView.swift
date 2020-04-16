@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import AlamofireImage
 
 open class WSTagView: UIView, UITextInputTraits {
 
@@ -29,7 +31,7 @@ open class WSTagView: UIView, UITextInputTraits {
         }
     }
     
-    open var image = UIImage() {
+    open var image: UIImage? {
         didSet {
             imageView.image = image
             setNeedsDisplay()
@@ -294,6 +296,10 @@ open class WSTagView: UIView, UITextInputTraits {
             return
         }
         onDidRequestSelection?(self)
+    }
+    
+    public func setImage(withURL: URL, placeholderImage: UIImage?) {
+        imageView.af.setImage(withURL: withURL, placeholderImage: placeholderImage)
     }
 
 }

@@ -8,8 +8,6 @@
 
 import UIKit
 import WSTagsField
-import Alamofire
-import AlamofireImage
 
 class ViewController: UIViewController {
 
@@ -109,15 +107,10 @@ extension ViewController {
     fileprivate func textFieldEvents() {
         tagsField.onWillAddTagView = { field, tagView in
             print("onWillAddTagView")
-            let downloader = ImageDownloader()
-            let urlRequest = URLRequest(url: URL(string: "https://httpbin.org/image/jpeg")!)
             
             tagView.imageSize = CGSize(width: 50, height: 40)
-            downloader.download(urlRequest) { response in
-                if case .success(let image) = response.result {
-                    tagView.image = image.imageWithoutBaseline()
-                }
-            }
+            tagView.setImage(withURL: URL(string: "https://httpbin.org/image/jpeg")!, placeholderImage: UIImage(systemName: "person.icloud.fill"))
+
             return tagView
         }
         
