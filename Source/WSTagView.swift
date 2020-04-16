@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 open class WSTagView: UIView, UITextInputTraits {
 
@@ -30,20 +29,9 @@ open class WSTagView: UIView, UITextInputTraits {
         }
     }
     
-    open var imagePlaceholder = UIImage(systemName: "person.circle.fill") {
+    open var image = UIImage() {
         didSet {
-            if imageURL == nil {
-                imageView.image = imagePlaceholder
-                updateFrame()
-                setNeedsDisplay()
-            }
-        }
-    }
-    
-    open var imageURL: URL? {
-        didSet {
-            imageView.kf.setImage(with: imageURL, placeholder: imagePlaceholder)
-            updateFrame()
+            imageView.image = image
             setNeedsDisplay()
         }
     }
@@ -56,7 +44,7 @@ open class WSTagView: UIView, UITextInputTraits {
         }
     }
     
-    open var imageSize: CGSize = CGSize(width: 22.0, height: 22.0) {
+    open var imageSize: CGSize = .zero {
         didSet {
             updateFrame()
             setNeedsDisplay()
@@ -66,6 +54,13 @@ open class WSTagView: UIView, UITextInputTraits {
     open var imageMargin: CGFloat = 10.0 {
         didSet {
             updateFrame()
+            setNeedsDisplay()
+        }
+    }
+    
+    open var imageCornerRadius: CGFloat? {
+        didSet {
+            self.imageView.layer.cornerRadius = imageCornerRadius ?? 0
             setNeedsDisplay()
         }
     }
@@ -156,12 +151,17 @@ open class WSTagView: UIView, UITextInputTraits {
         selectedColor = .gray
         selectedTextColor = .black
         
-        imageView.frame = CGRect(x: layoutMargins.left, y: layoutMargins.top, width: imageSize.width, height: imageSize.height)
-        imageView.layer.cornerRadius = 10
+        if let personImage = UIImage(systemName: "person.circle.fill") {
+            image = personImage
+            imageSize = personImage.size
+        }
+        
+        imageView.frame = CGRect(x: layoutMargins.left, y: layoutMargins.top, width: 0, height: 0)
         imageView.isHidden = isImageHidden
-        imageView.image = imagePlaceholder
+        imageView.image = image
         imageView.tintColor = .white
         imageView.backgroundColor = .clear
+        imageView.layer.masksToBounds = true
         addSubview(imageView)
 
         textLabel.frame = CGRect(x: layoutMargins.left, y: layoutMargins.top, width: 0, height: 0)
@@ -219,11 +219,8 @@ open class WSTagView: UIView, UITextInputTraits {
 
     open override var intrinsicContentSize: CGSize {
         let labelIntrinsicSize = textLabel.intrinsicContentSize
-        let imageSize = isImageHidden ? CGSize(width: 0, height: 0) : self.imageSize
+        let imageSize = isImageHidden ? .zero : self.imageSize
         let imageMargin = isImageHidden ? 0.0 : self.imageMargin
-        print(labelIntrinsicSize)
-        print(imageSize)
-        print(imageMargin)
         return CGSize(width: labelIntrinsicSize.width + imageSize.width + imageMargin + layoutMargins.left + layoutMargins.right,
                       height: max(labelIntrinsicSize.height, imageSize.height) + layoutMargins.top + layoutMargins.bottom)
     }
@@ -264,7 +261,7 @@ open class WSTagView: UIView, UITextInputTraits {
     // MARK: - Laying out
     open override func layoutSubviews() {
         super.layoutSubviews()
-        let imageSize = isImageHidden ? CGSize(width: 0, height: 0) : self.imageSize
+        let imageSize = isImageHidden ? .zero : self.imageSize
         let imageMargin = isImageHidden ? 0 : self.imageMargin
         let insets = bounds.inset(by: layoutMargins)
         imageView.frame = CGRect(x: insets.minX, y: insets.minY, width: imageSize.width, height: imageSize.height)
@@ -272,10 +269,6 @@ open class WSTagView: UIView, UITextInputTraits {
         if frame.width == 0 || frame.height == 0 {
             frame.size = self.intrinsicContentSize
         }
-        print("layout")
-        print(textLabel.frame)
-        print(imageView.frame)
-        print(frame)
     }
 
     // MARK: - First Responder (needed to capture keyboard)

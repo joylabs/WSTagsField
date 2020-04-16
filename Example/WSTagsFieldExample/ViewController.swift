@@ -8,6 +8,8 @@
 
 import UIKit
 import WSTagsField
+import Alamofire
+import AlamofireImage
 
 class ViewController: UIViewController {
 
@@ -25,6 +27,7 @@ class ViewController: UIViewController {
         //tagsField.heightAnchor.constraint(equalToConstant: 150).isActive = true
 
         tagsField.cornerRadius = 3.0
+        tagsField.imageCornerRadius = 10.0
         tagsField.spaceBetweenLines = 10
         tagsField.spaceBetweenTags = 10
 
@@ -40,7 +43,7 @@ class ViewController: UIViewController {
         tagsField.backgroundColor = .lightGray
         tagsField.returnKeyType = .continue
         tagsField.delimiter = ""
-        tagsField.isImageVisible = true
+        tagsField.showImages = true
 
         tagsField.textDelegate = self
 
@@ -94,12 +97,30 @@ class ViewController: UIViewController {
     @IBAction func touchTableView(_ sender: UIButton) {
         present(UINavigationController(rootViewController: TableViewController()), animated: true, completion: nil)
     }
-
+    
+    @IBAction func touchToggleImages(_ sender: Any) {
+        tagsField.showImages = !tagsField.showImages
+    }
+    
 }
 
 extension ViewController {
 
     fileprivate func textFieldEvents() {
+        tagsField.onWillAddTagView = { field, tagView in
+            print("onWillAddTagView")
+            let downloader = ImageDownloader()
+            let urlRequest = URLRequest(url: URL(string: "https://httpbin.org/image/jpeg")!)
+            
+            tagView.imageSize = CGSize(width: 50, height: 40)
+            downloader.download(urlRequest) { response in
+                if case .success(let image) = response.result {
+                    tagView.image = image.imageWithoutBaseline()
+                }
+            }
+            return tagView
+        }
+        
         tagsField.onDidAddTag = { field, tag in
             print("onDidAddTag", tag.text)
         }

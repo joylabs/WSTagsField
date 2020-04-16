@@ -67,9 +67,11 @@ open class WSTagsField: UIScrollView {
         }
     }
     
-    open var isImageVisible: Bool = false {
+    /// Show images in tags 
+    open var showImages: Bool = false {
         didSet {
-            tagViews.forEach { $0.isImageHidden = !isImageVisible }
+            tagViews.forEach { $0.isImageHidden = !showImages }
+            repositionViews()
         }
     }
 
@@ -92,6 +94,12 @@ open class WSTagsField: UIScrollView {
     open var cornerRadius: CGFloat = 3.0 {
         didSet {
             tagViews.forEach { $0.cornerRadius = self.cornerRadius }
+        }
+    }
+    
+    open var imageCornerRadius: CGFloat? {
+        didSet {
+            tagViews.forEach { $0.imageCornerRadius = self.imageCornerRadius }
         }
     }
 
@@ -222,7 +230,7 @@ open class WSTagsField: UIScrollView {
     open var onDidChangeText: ((WSTagsField, _ text: String?) -> Void)?
     
     /// Called before a tag is added. You should use this opportunity to update the tag before it's added.
-    open var onWillAddTag: ((WSTagsField, _ tag: WSTag) -> WSTag)?
+    open var onWillAddTagView: ((WSTagsField, _ tag: WSTagView) -> WSTagView)?
 
     /// Called when a tag has been added. You should use this opportunity to update your local list of selected items.
     open var onDidAddTag: ((WSTagsField, _ tag: WSTag) -> Void)?
@@ -382,11 +390,6 @@ open class WSTagsField: UIScrollView {
             return
         }
         
-        var tag = tag
-        if let onWillAddTag = onWillAddTag {
-            tag = onWillAddTag(self, tag)
-        }
-
         self.tags.append(tag)
 
         let tagView = WSTagView(tag: tag)
@@ -396,7 +399,8 @@ open class WSTagsField: UIScrollView {
         tagView.selectedColor = self.selectedColor
         tagView.selectedTextColor = self.selectedTextColor
         tagView.displayDelimiter = self.isDelimiterVisible ? self.delimiter : ""
-        tagView.isImageHidden = !self.isImageVisible
+        tagView.isImageHidden = !self.showImages
+        tagView.imageCornerRadius = self.imageCornerRadius
         tagView.cornerRadius = self.cornerRadius
         tagView.borderWidth = self.borderWidth
         tagView.borderColor = self.borderColor
@@ -427,8 +431,8 @@ open class WSTagsField: UIScrollView {
                 self?.textField.text = text
             }
         }
-
-        self.tagViews.append(tagView)
+        
+        self.tagViews.append(onWillAddTagView?(self, tagView) ?? tagView)
         addSubview(tagView)
 
         self.textField.text = ""
@@ -675,7 +679,8 @@ extension WSTagsField {
         let maxWidth: CGFloat = layoutWidth - contentInset.left - contentInset.right
         var curX: CGFloat = 0.0
         var curY: CGFloat = 0.0
-        var totalHeight: CGFloat = Constants.STANDARD_ROW_HEIGHT
+        let tagHeight = tagViews.first?.frame.height ?? Constants.STANDARD_ROW_HEIGHT
+        var totalHeight: CGFloat = tagHeight
 
         // Tag views Rects
         var tagRect = CGRect.null
@@ -685,13 +690,13 @@ extension WSTagsField {
             if curX + tagRect.width > maxWidth {
                 // Need a new line
                 curX = 0
-                curY += Constants.STANDARD_ROW_HEIGHT + spaceBetweenLines
-                totalHeight += Constants.STANDARD_ROW_HEIGHT
+                curY += tagHeight + spaceBetweenLines
+                totalHeight += tagHeight
             }
 
             tagRect.origin.x = curX
             // Center our tagView vertically within STANDARD_ROW_HEIGHT
-            tagRect.origin.y = curY + ((Constants.STANDARD_ROW_HEIGHT - tagRect.height)/2.0)
+            tagRect.origin.y = curY + ((tagHeight - tagRect.height)/2.0)
 
             closure(tagView, tagRect, nil)
 
