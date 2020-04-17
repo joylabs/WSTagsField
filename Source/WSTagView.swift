@@ -7,10 +7,15 @@
 //
 
 import UIKit
+import Alamofire
+import AlamofireImage
 
 open class WSTagView: UIView, UITextInputTraits {
 
     fileprivate let textLabel = UILabel()
+    fileprivate let imageView = UIImageView()
+    
+    open fileprivate(set) var tags = [WSTag]()
 
     open var displayText: String = "" {
         didSet {
@@ -22,6 +27,42 @@ open class WSTagView: UIView, UITextInputTraits {
     open var displayDelimiter: String = "" {
         didSet {
             updateLabelText()
+            setNeedsDisplay()
+        }
+    }
+    
+    open var image: UIImage? {
+        didSet {
+            imageView.image = image
+            setNeedsDisplay()
+        }
+    }
+    
+    open var isImageHidden: Bool = true {
+        didSet {
+            imageView.isHidden = isImageHidden
+            setNeedsDisplay()
+            setNeedsLayout()
+        }
+    }
+    
+    open var imageSize: CGSize = .zero {
+        didSet {
+            updateFrame()
+            setNeedsDisplay()
+        }
+    }
+    
+    open var imageMargin: CGFloat = 10.0 {
+        didSet {
+            updateFrame()
+            setNeedsDisplay()
+        }
+    }
+    
+    open var imageCornerRadius: CGFloat? {
+        didSet {
+            self.imageView.layer.cornerRadius = imageCornerRadius ?? 0
             setNeedsDisplay()
         }
     }
@@ -111,6 +152,19 @@ open class WSTagView: UIView, UITextInputTraits {
         textColor = .white
         selectedColor = .gray
         selectedTextColor = .black
+        
+        if let personImage = UIImage(systemName: "person.circle.fill") {
+            image = personImage
+            imageSize = personImage.size
+        }
+        
+        imageView.frame = CGRect(x: layoutMargins.left, y: layoutMargins.top, width: 0, height: 0)
+        imageView.isHidden = isImageHidden
+        imageView.image = image
+        imageView.tintColor = .white
+        imageView.backgroundColor = .clear
+        imageView.layer.masksToBounds = true
+        addSubview(imageView)
 
         textLabel.frame = CGRect(x: layoutMargins.left, y: layoutMargins.top, width: 0, height: 0)
         textLabel.font = font
@@ -136,6 +190,7 @@ open class WSTagView: UIView, UITextInputTraits {
     fileprivate func updateColors() {
         self.backgroundColor = selected ? selectedColor : tintColor
         textLabel.textColor = selected ? selectedTextColor : textColor
+        imageView.tintColor = selected ? selectedTextColor : textColor
     }
 
     internal func updateContent(animated: Bool) {
@@ -166,8 +221,10 @@ open class WSTagView: UIView, UITextInputTraits {
 
     open override var intrinsicContentSize: CGSize {
         let labelIntrinsicSize = textLabel.intrinsicContentSize
-        return CGSize(width: labelIntrinsicSize.width + layoutMargins.left + layoutMargins.right,
-                      height: labelIntrinsicSize.height + layoutMargins.top + layoutMargins.bottom)
+        let imageSize = isImageHidden ? .zero : self.imageSize
+        let imageMargin = isImageHidden ? 0.0 : self.imageMargin
+        return CGSize(width: labelIntrinsicSize.width + imageSize.width + imageMargin + layoutMargins.left + layoutMargins.right,
+                      height: max(labelIntrinsicSize.height, imageSize.height) + layoutMargins.top + layoutMargins.bottom)
     }
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
@@ -176,8 +233,10 @@ open class WSTagView: UIView, UITextInputTraits {
         let fittingSize = CGSize(width: size.width - layoutMarginsHorizontal,
                                  height: size.height - layoutMarginsVertical)
         let labelSize = textLabel.sizeThatFits(fittingSize)
-        return CGSize(width: labelSize.width + layoutMarginsHorizontal,
-                      height: labelSize.height + layoutMarginsVertical)
+        let imageSize = isImageHidden ? CGSize(width: 0, height: 0) : imageView.sizeThatFits(fittingSize)
+        let imageMargin = isImageHidden ? 0.0 : self.imageMargin
+        return CGSize(width: labelSize.width + imageSize.width + imageMargin + layoutMarginsHorizontal,
+                      height: max(labelSize.height, imageSize.height) + layoutMarginsVertical)
     }
 
     open func sizeToFit(_ size: CGSize) -> CGSize {
@@ -193,6 +252,10 @@ open class WSTagView: UIView, UITextInputTraits {
         // Unselected shows "[displayText]," and selected is "[displayText]"
         textLabel.text = displayText + displayDelimiter
         // Expand Label
+        updateFrame()
+    }
+    
+    fileprivate func updateFrame() {
         let intrinsicSize = self.intrinsicContentSize
         frame = CGRect(x: 0, y: 0, width: intrinsicSize.width, height: intrinsicSize.height)
     }
@@ -200,7 +263,11 @@ open class WSTagView: UIView, UITextInputTraits {
     // MARK: - Laying out
     open override func layoutSubviews() {
         super.layoutSubviews()
-        textLabel.frame = bounds.inset(by: layoutMargins)
+        let imageSize = isImageHidden ? .zero : self.imageSize
+        let imageMargin = isImageHidden ? 0 : self.imageMargin
+        let insets = bounds.inset(by: layoutMargins)
+        imageView.frame = CGRect(x: insets.minX, y: insets.minY, width: imageSize.width, height: imageSize.height)
+        textLabel.frame = insets.offsetBy(dx: imageSize.width + imageMargin, dy: 0)
         if frame.width == 0 || frame.height == 0 {
             frame.size = self.intrinsicContentSize
         }
@@ -229,6 +296,10 @@ open class WSTagView: UIView, UITextInputTraits {
             return
         }
         onDidRequestSelection?(self)
+    }
+    
+    public func setImage(withURL: URL, placeholderImage: UIImage?) {
+        imageView.af.setImage(withURL: withURL, placeholderImage: placeholderImage)
     }
 
 }

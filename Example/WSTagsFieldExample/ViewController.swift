@@ -25,6 +25,7 @@ class ViewController: UIViewController {
         //tagsField.heightAnchor.constraint(equalToConstant: 150).isActive = true
 
         tagsField.cornerRadius = 3.0
+        tagsField.imageCornerRadius = 10.0
         tagsField.spaceBetweenLines = 10
         tagsField.spaceBetweenTags = 10
 
@@ -40,6 +41,7 @@ class ViewController: UIViewController {
         tagsField.backgroundColor = .lightGray
         tagsField.returnKeyType = .continue
         tagsField.delimiter = ""
+        tagsField.showImages = true
 
         tagsField.textDelegate = self
 
@@ -93,12 +95,25 @@ class ViewController: UIViewController {
     @IBAction func touchTableView(_ sender: UIButton) {
         present(UINavigationController(rootViewController: TableViewController()), animated: true, completion: nil)
     }
-
+    
+    @IBAction func touchToggleImages(_ sender: Any) {
+        tagsField.showImages = !tagsField.showImages
+    }
+    
 }
 
 extension ViewController {
 
     fileprivate func textFieldEvents() {
+        tagsField.onWillAddTagView = { field, tagView in
+            print("onWillAddTagView")
+            
+            tagView.imageSize = CGSize(width: 50, height: 40)
+            tagView.setImage(withURL: URL(string: "https://httpbin.org/image/jpeg")!, placeholderImage: UIImage(systemName: "person.icloud.fill"))
+
+            return tagView
+        }
+        
         tagsField.onDidAddTag = { field, tag in
             print("onDidAddTag", tag.text)
         }

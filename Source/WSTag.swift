@@ -9,11 +9,10 @@
 import Foundation
 
 public struct WSTag: Hashable {
-
     public let text: String
     public let context: AnyHashable?
 
-    public init(_ text: String, context: AnyHashable? = nil) {
+    public init(_ text: String, _ imageURL: String? = nil, context: AnyHashable? = nil) {
         self.text = text
         self.context = context
     }
@@ -21,7 +20,6 @@ public struct WSTag: Hashable {
     public func equals(_ other: WSTag) -> Bool {
         return self.text == other.text && self.context == other.context
     }
-
 }
 
 public func == (lhs: WSTag, rhs: WSTag) -> Bool {

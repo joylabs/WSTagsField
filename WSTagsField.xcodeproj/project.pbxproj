@@ -3,12 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		125AC6EC1F14D13F00137101 /* BackspaceDetectingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 125AC6EB1F14D13F00137101 /* BackspaceDetectingTextField.swift */; };
 		125AC6EF1F14D6A600137101 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 125AC6EE1F14D6A600137101 /* Constants.swift */; };
+		68BCB0BB2448EF5E00650D40 /* AlamofireImage in Frameworks */ = {isa = PBXBuildFile; productRef = 68BCB0BA2448EF5E00650D40 /* AlamofireImage */; };
 		D77F81B31D2A957400E6FF3E /* WSTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77F81B01D2A957400E6FF3E /* WSTag.swift */; };
 		D77F81B41D2A957400E6FF3E /* WSTagsField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77F81B11D2A957400E6FF3E /* WSTagsField.swift */; };
 		D77F81B51D2A957400E6FF3E /* WSTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77F81B21D2A957400E6FF3E /* WSTagView.swift */; };
@@ -26,6 +27,19 @@
 			remoteInfo = WSTagsField;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		686F7755243D0470004B2EFF /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		125AC6EB1F14D13F00137101 /* BackspaceDetectingTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BackspaceDetectingTextField.swift; path = Source/BackspaceDetectingTextField.swift; sourceTree = SOURCE_ROOT; };
@@ -46,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68BCB0BB2448EF5E00650D40 /* AlamofireImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,12 +139,16 @@
 				D78C9FEC1D2A6AFD004F4BFF /* Headers */,
 				D78C9FED1D2A6AFD004F4BFF /* Resources */,
 				125AC6ED1F14D41100137101 /* Swift Lint */,
+				686F7755243D0470004B2EFF /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = WSTagsField;
+			packageProductDependencies = (
+				68BCB0BA2448EF5E00650D40 /* AlamofireImage */,
+			);
 			productName = WSTagsField;
 			productReference = D78C9FEF1D2A6AFD004F4BFF /* WSTagsField.framework */;
 			productType = "com.apple.product-type.framework";
@@ -181,6 +200,9 @@
 				Base,
 			);
 			mainGroup = D78C9FE51D2A6AFD004F4BFF;
+			packageReferences = (
+				68BCB0B92448EF5E00650D40 /* XCRemoteSwiftPackageReference "AlamofireImage" */,
+			);
 			productRefGroup = D78C9FF01D2A6AFD004F4BFF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -221,7 +243,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -368,7 +390,8 @@
 				SDKROOT = iphoneos;
 				SHARED_BUILD_NUMBER = 2019.11.5.16.12;
 				SHARED_VERSION_NUMBER = 5.2.0;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -390,7 +413,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = WSTagsField/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.whitesmith.WSTagsField;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -412,7 +440,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = WSTagsField/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.whitesmith.WSTagsField;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -424,7 +457,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INFOPLIST_FILE = WSTagsFieldTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.whitesmith.WSTagsFieldTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -435,7 +472,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INFOPLIST_FILE = WSTagsFieldTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = co.whitesmith.WSTagsFieldTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -473,6 +514,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		68BCB0B92448EF5E00650D40 /* XCRemoteSwiftPackageReference "AlamofireImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/AlamofireImage.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		68BCB0BA2448EF5E00650D40 /* AlamofireImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 68BCB0B92448EF5E00650D40 /* XCRemoteSwiftPackageReference "AlamofireImage" */;
+			productName = AlamofireImage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D78C9FE61D2A6AFD004F4BFF /* Project object */;
 }
